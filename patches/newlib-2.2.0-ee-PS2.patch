@@ -18102,3 +18102,15 @@ diff -burN orig.newlib-2.2.0/newlib/libm/configure.in newlib-2.2.0/newlib/libm/c
  .PHONY: force
  force:
  
+--- orig.newlib-2.2.0/libgloss/mips/crt0.S	2014-11-28 09:51:03.000000000 +0100
++++ newlib-2.2.0/libgloss/mips/crt0.S	2015-05-11 21:42:16.439999295 +0200
+@@ -14,9 +14,6 @@
+  * they apply.
+  */
+ 
+-/* This file does not use any floating-point ABI.  */
+-	.gnu_attribute 4,0
+-
+ #ifdef __mips16
+ /* This file contains 32 bit assembly code.  */
+ 	.set nomips16
