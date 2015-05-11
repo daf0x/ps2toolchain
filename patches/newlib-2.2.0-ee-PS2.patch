@@ -17973,4 +17973,132 @@ diff -burN orig.newlib-2.2.0/newlib/libc/include/sys/reent.h newlib-2.2.0/newlib
 +extern struct _reent *_global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
  
  void _reclaim_reent _PARAMS ((struct _reent *));
+
+diff -burN orig.newlib-2.2.0/newlib/libm/configure newlib-2.2.0/newlib/libm/configure
+--- orig.newlib-2.2.0/newlib/libm/configure	2014-12-18 21:29:00.000000000 +0100
++++ newlib-2.2.0/newlib/libm/configure	2015-05-11 19:09:14.268124672 +0200
+@@ -11850,7 +11850,7 @@
+ 
+ 
+ 
+-ac_config_files="$ac_config_files Makefile math/Makefile mathfp/Makefile common/Makefile complex/Makefile"
++ac_config_files="$ac_config_files Makefile math/Makefile mathfp/Makefile common/Makefile"
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+@@ -12911,7 +12911,6 @@
+     "math/Makefile") CONFIG_FILES="$CONFIG_FILES math/Makefile" ;;
+     "mathfp/Makefile") CONFIG_FILES="$CONFIG_FILES mathfp/Makefile" ;;
+     "common/Makefile") CONFIG_FILES="$CONFIG_FILES common/Makefile" ;;
+-    "complex/Makefile") CONFIG_FILES="$CONFIG_FILES complex/Makefile" ;;
+ 
+   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+   esac
+diff -burN orig.newlib-2.2.0/newlib/libm/configure.in newlib-2.2.0/newlib/libm/configure.in
+--- orig.newlib-2.2.0/newlib/libm/configure.in	2010-10-08 12:35:14.000000000 +0200
++++ newlib-2.2.0/newlib/libm/configure.in	2015-05-11 19:09:19.946103757 +0200
+@@ -62,5 +62,5 @@
+ 
+ AC_SUBST(LIBM_MACHINE_LIB)
+ 
+-AC_CONFIG_FILES([Makefile math/Makefile mathfp/Makefile common/Makefile complex/Makefile])
++AC_CONFIG_FILES([Makefile math/Makefile mathfp/Makefile common/Makefile])
+ AC_OUTPUT
+--- orig.newlib-2.2.0/newlib/libm/Makefile.in	2012-12-20 22:10:24.000000000 +0100
++++ newlib-2.2.0/newlib/libm/Makefile.in	2015-05-11 21:25:33.916754634 +0200
+@@ -79,12 +79,11 @@
+ LTLIBRARIES = $(noinst_LTLIBRARIES)
+ am__DEPENDENCIES_1 =
+ @USE_LIBTOOL_FALSE@am__DEPENDENCIES_2 = $(MATHDIR)/lib.$(aext) \
+-@USE_LIBTOOL_FALSE@	common/lib.$(aext) complex/lib.$(aext) \
++@USE_LIBTOOL_FALSE@	common/lib.$(aext) \
+ @USE_LIBTOOL_FALSE@	$(am__DEPENDENCIES_1)
+ @USE_LIBTOOL_TRUE@am__DEPENDENCIES_2 =  \
+ @USE_LIBTOOL_TRUE@	$(MATHDIR)/lib$(MATHDIR).$(aext) \
+ @USE_LIBTOOL_TRUE@	common/libcommon.$(aext) \
+-@USE_LIBTOOL_TRUE@	complex/libcomplex.$(aext) \
+ @USE_LIBTOOL_TRUE@	$(am__DEPENDENCIES_1)
+ @USE_LIBTOOL_TRUE@libm_la_DEPENDENCIES = $(am__DEPENDENCIES_2)
+ am_libm_la_OBJECTS =
+@@ -168,7 +167,7 @@
+ 	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = math mathfp common complex machine
++DIST_SUBDIRS = math mathfp common machine
+ ACLOCAL = @ACLOCAL@
+ AMTAR = @AMTAR@
+ AR = @AR@
+@@ -299,10 +298,10 @@
+ AUTOMAKE_OPTIONS = cygnus
+ @NEWLIB_HW_FP_FALSE@MATHDIR = math
+ @NEWLIB_HW_FP_TRUE@MATHDIR = mathfp
+-SUBDIRS = $(MATHDIR) common complex machine 
++SUBDIRS = $(MATHDIR) common machine
+ libm_la_LDFLAGS = -Xcompiler -nostdlib
+-@USE_LIBTOOL_FALSE@SUBLIBS = $(MATHDIR)/lib.$(aext) common/lib.$(aext) complex/lib.$(aext) $(LIBM_MACHINE_LIB)
+-@USE_LIBTOOL_TRUE@SUBLIBS = $(MATHDIR)/lib$(MATHDIR).$(aext) common/libcommon.$(aext) complex/libcomplex.$(aext)  $(LIBM_MACHINE_LIB)
++@USE_LIBTOOL_FALSE@SUBLIBS = $(MATHDIR)/lib.$(aext) common/lib.$(aext) $(LIBM_MACHINE_LIB)
++@USE_LIBTOOL_TRUE@SUBLIBS = $(MATHDIR)/lib$(MATHDIR).$(aext) common/libcommon.$(aext) $(LIBM_MACHINE_LIB)
+ @USE_LIBTOOL_TRUE@noinst_LTLIBRARIES = libm.la
+ @USE_LIBTOOL_TRUE@libm_la_SOURCES = 
+ @USE_LIBTOOL_TRUE@libm_la_LIBADD = $(SUBLIBS)
+@@ -908,7 +907,7 @@
+ 
+ $(SUBLIBS):
+ 
+-libm.dvi: targetdep.tex math/stmp-def complex/stmp-def
++libm.dvi: targetdep.tex math/stmp-def
+ 
+ stmp-targetdep: force
+ 	rm -f tmp.texi
+@@ -925,8 +924,6 @@
+ 
+ math/stmp-def: stmp-targetdep ; @true
+ 
+-complex/stmp-def: stmp-targetdep ; @true
+-
+ .PHONY: force
+ force:
+ 
+--- orig.newlib-2.2.0/newlib/libm/Makefile.am	2010-10-19 00:40:24.000000000 +0200
++++ newlib-2.2.0/newlib/libm/Makefile.am	2015-05-11 21:25:46.276704086 +0200
+@@ -8,17 +8,17 @@
+ MATHDIR = math
+ endif
+ 
+-SUBDIRS = $(MATHDIR) common complex machine 
++SUBDIRS = $(MATHDIR) common machine
+ 
+ libm_la_LDFLAGS = -Xcompiler -nostdlib
+ 
+ if USE_LIBTOOL
+-SUBLIBS = $(MATHDIR)/lib$(MATHDIR).$(aext) common/libcommon.$(aext) complex/libcomplex.$(aext)  $(LIBM_MACHINE_LIB)
++SUBLIBS = $(MATHDIR)/lib$(MATHDIR).$(aext) common/libcommon.$(aext) $(LIBM_MACHINE_LIB)
+ noinst_LTLIBRARIES = libm.la
+ libm_la_SOURCES =
+ libm_la_LIBADD = $(SUBLIBS)
+ else
+-SUBLIBS = $(MATHDIR)/lib.$(aext) common/lib.$(aext) complex/lib.$(aext) $(LIBM_MACHINE_LIB)
++SUBLIBS = $(MATHDIR)/lib.$(aext) common/lib.$(aext) $(LIBM_MACHINE_LIB)
+ noinst_LIBRARIES = libm.a
+ libm.a: $(SUBLIBS)
+ 	rm -f $@
+@@ -39,7 +39,7 @@
+ 
+ libm_TEXINFOS = targetdep.tex
+ 
+-libm.dvi: targetdep.tex math/stmp-def complex/stmp-def
++libm.dvi: targetdep.tex math/stmp-def
+ 
+ stmp-targetdep: force
+ 	rm -f tmp.texi
+@@ -56,8 +56,6 @@
+ 
+ math/stmp-def: stmp-targetdep ; @true
+ 
+-complex/stmp-def: stmp-targetdep ; @true
+-
+ .PHONY: force
+ force:
  
