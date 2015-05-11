@@ -17953,3 +17953,24 @@ diff -burN orig.newlib-2.2.0/newlib/libc/search/qsort.c newlib-2.2.0/newlib/libc
  )
  {
  	return CMP(thunk, a, b) < 0 ?
+diff -burN orig.newlib-2.2.0/newlib/reent/impure.c newlib-2.2.0/newlib/libc/reent/impure.c
+--- orig.newlib-2.2.0/newlib/libc/reent/impure.c	2009-04-21 20:38:53.000000000 +0200
++++ newlib-2.2.0/newlib/libc/reent/impure.c	2015-05-09 23:56:56.810900739 +0200
+@@ -25,4 +25,4 @@
+ extern struct _reent reent_data __attribute__ ((alias("impure_data")));
+ #endif
+ struct _reent *__ATTRIBUTE_IMPURE_PTR__ _impure_ptr = &impure_data;
+-struct _reent *_CONST __ATTRIBUTE_IMPURE_PTR__ _global_impure_ptr = &impure_data;
++struct _reent *__ATTRIBUTE_IMPURE_PTR__ _global_impure_ptr = &impure_data;
+diff -burN orig.newlib-2.2.0/newlib/libc/include/sys/reent.h newlib-2.2.0/newlib/libc/include/sys/reent.h
+--- orig.newlib-2.2.0/newlib/libc/include/sys/reent.h	2013-10-23 12:04:43.000000000 +0200
++++ newlib-2.2.0/newlib/libc/include/sys/reent.h	2015-05-09 23:57:47.102745883 +0200
+@@ -760,7 +760,7 @@
+ #endif
+ 
+ extern struct _reent *_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
+-extern struct _reent *_CONST _global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
++extern struct _reent *_global_impure_ptr __ATTRIBUTE_IMPURE_PTR__;
+ 
+ void _reclaim_reent _PARAMS ((struct _reent *));
+ 
